@@ -20,7 +20,6 @@ scalacOptions ++= Seq(
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard"
-  // "-Ywarn-unused-import" // commented out because twirl and routes file
 )
 
 libraryDependencies ++= Seq(
@@ -37,9 +36,7 @@ libraryDependencies ++= Seq(
   "net.databinder.dispatch" %% "dispatch-core"         % "0.11.3" ,
 
   // database connectors
-  "mysql"            % "mysql-connector-java" % "5.1.36"  ,
-  "org.mariadb.jdbc" % "mariadb-java-client"  % "1.1.8"   ,
-  "com.h2database"   % "h2"                   % "1.4.187" ,
+  "com.h2database" % "h2" % "1.4.187" ,
 
   // css/javascript
   "org.webjars" % "angularjs"            % "1.3.15"  exclude("org.webjars", "jquery") ,
@@ -51,11 +48,11 @@ libraryDependencies ++= Seq(
   "org.webjars" % "font-awesome"         % "4.3.0-2" ,
   "org.webjars" % "sigma.js"             % "1.0.3"
 
-  // testing // NO TESTS ATM
-  // "org.scalatest"     %% "scalatest"    % "2.2.5"   % "test" ,
-  // "org.scalacheck"    %% "scalacheck"   % "1.12.3"  % "test" ,
-  // "com.typesafe.akka" %% "akka-testkit" % "2.3.11"  % "test" ,
-  // "org.mockito"       %  "mockito-core" % "1.10.19" % "test"
+  // testing
+  "org.scalatest"     %% "scalatest"    % "2.2.5"   % "test" ,
+  "org.scalacheck"    %% "scalacheck"   % "1.12.3"  % "test" ,
+  "com.typesafe.akka" %% "akka-testkit" % "2.3.11"  % "test" ,
+  "org.mockito"       %  "mockito-core" % "1.10.19" % "test"
 )
 
 import PlayKeys.playPackageAssets

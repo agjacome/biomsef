@@ -26,9 +26,6 @@ final class EUtilsService {
   def fetchPubMedArticles(pmids: Set[Article.PMID]): Future[Set[Article]] =
     fetch("pubmed", pmids, "abstract").map(parseResultArticles).map(_.toSet)
 
-  def fetchTaxonomyScientificName(taxonomyId: Long): Future[Option[String]] =
-    summary("taxonomy", taxonomyId).map(parseScientificName)
-
   def serviceURL(service: String): String =
     s"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/$service.fcgi"
 
@@ -47,11 +44,6 @@ final class EUtilsService {
       "db"      -> db,
       "id"      -> ids.mkString(","),
       "rettype" -> rettype
-    )
-
-  def summary(db: String, id: Long): Future[XMLElement] =
-    simpleHttpRequest(serviceURL("esummary"))(
-      "db" -> db, "id" -> id.toString
     )
 
   private def simpleHttpRequest[A](address: String)(params: (String, String)*)(implicit asA: Res => A): Future[A] =
