@@ -1,0 +1,34 @@
+<div data-ng-include src='"assets/html/smallLogo.html"'></div>
+<div data-ng-include src='"assets/html/adminBar.html"'></div>
+<div data-ng-include src='"assets/html/errorMessage.html"'></div>
+
+<div class="row">
+    <div data-ng-show="loading" class="col-xs-12 text-center">
+        <span class="text-muted fa fa-spin fa-spinner fa-3x"></span>
+    </div>
+    <div data-ng-hide="loading" class="col-xs-12">
+        <form name="documentForm" accept-charset="UTF-8" role="form" data-ng-enter="createDocument()">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Create a new document</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group col-sm-12 col-md-9" data-ng-class="{ 'has-error' : document.title != '' && documentForm.title.$invalid }">
+                        <input type="text" name="title" placeholder="Document title" class="form-control" data-ng-model="document.title" required>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-3" data-ng-class="{ 'has-error' : documentForm.pubmedId.$invalid }">
+                        <input type="number" data-min="1" name="pubmedId" placeholder="PubMed ID (Optional)" class="form-control" data-ng-model="document.pubmedId">
+                    </div>
+                    <div class="form-group col-xs-12" data-ng-class="{ 'has-error' : document.content != '' && documentForm.text.$invalid }">
+                        <textarea name="text" class="form-control" rows="15" placeholder="Article content" data-ng-model="document.content" required></textarea>
+                    </div>
+                </div>
+                <div class="panel-footer text-center">
+                    <button class="btn btn-warning" type="button" data-ng-click="createDocument()" data-ng-disabled="documentForm.$invalid">
+                        Create document
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

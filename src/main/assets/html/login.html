@@ -1,0 +1,29 @@
+<div data-ng-include src='"assets/html/smallLogo.html"'></div>
+
+<div class="row login-box">
+    <div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Sign in as administrator</h3>
+            </div>
+            <div class="panel-body">
+                <div data-ng-include src='"assets/html/errorMessage.html"'></div>
+                <form name="loginForm" accept-charset="UTF-8" role="form" data-ng-enter='login()'>
+                    <fieldset>
+                        <div class="form-group col-xs-12" data-ng-class="{ 'has-error': credentials.email != '' && loginForm.email.$invalid }">
+                            <input name="email" placeholder="E-mail" class="form-control" data-ng-model="credentials.email" type="email" required autofocus>
+                        </div>
+                        <div class="form-group col-xs-12" data-ng-class="{ 'has-error': credentials.password != '' && loginForm.password.$error.required }">
+                            <input name="password" placeholder="Password" class="form-control" data-ng-model="credentials.password" type="password" required>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-danger" type="button" data-ng-click="login()" data-ng-disabled="loginForm.$invalid">
+                                <span class="fa fa-sign-in fa-lg"></span> Sign In
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

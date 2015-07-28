@@ -1,0 +1,70 @@
+@media(min-height : 200px) {
+    .search-logo {
+        margin-top : 1em;
+    }
+
+    .search-logo h1 a {
+        display         : block;
+        height          : 57px;
+        max-width       : 407px;
+        margin          : 0 auto;
+        background      : url("../img/logo-small.png") no-repeat center bottom;
+        background-size : contain;
+    }
+}
+
+#list-mode, #graph-mode {
+    margin-top: 10px;
+}
+
+#graph-container {
+    border : 1px solid #444;
+    width  : 100%;
+    height : 600px;
+}
+
+.result-list a.title {
+    color : #333;
+}
+
+.result-spinner {
+    margin-top : 3em;
+}
+
+.keyword {
+    border    : 1px solid #ccc;
+    display   : inline-block;
+    font-size : 1.1em;
+    overflow  : hidden;
+    padding   : 0 1em;
+}
+
+.keyword:hover {
+    cursor : pointer;
+}
+
+.category-filter ul {
+    margin-bottom: 0;
+}
+
+.category-filter .keyword {
+    border: 2px outset #ccc;
+}
+
+.category-filter .selected {
+    border: 2px inset #ccc;
+    background-color: #F5D76E;
+    color: #000;
+}
+
+.category-filter a,
+.category-filter a:hover,
+.category-filter a:active,
+.category-filter a:visited {
+    color: #fff;
+    text-decoration: none;
+}
+
+.category-filter a:hover {
+    cursor: pointer;
+}

@@ -1,0 +1,11 @@
+@media(min-height : 300px) { .login-box { margin-top : 2em; } }
+@media(min-height : 600px) { .login-box { margin-top : 4em; } }
+
+.login-box .input-group {
+    margin-bottom : 0.5em;
+}
+
+.login-box .form-control:focus {
+    border-color : #ccc;
+    box-shadow   : none;
+}

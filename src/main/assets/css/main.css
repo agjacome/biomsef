@@ -1,0 +1,78 @@
+@import "admin.css";
+@import "document.css";
+@import "home.css";
+@import "login.css";
+@import "search.css";
+
+/* http://trentwalton.com/2013/01/16/windows-phone-8-viewport-fix/ */
+@-webkit-viewport { width : device-width }
+@-moz-viewport { width : device-width }
+@-ms-viewport { width : device-width }
+@-o-viewport { width : device-width }
+@viewport { width : device-width }
+
+* {
+  -webkit-border-radius : 0 !important;
+     -moz-border-radius : 0 !important;
+          border-radius : 0 !important;
+}
+
+html {
+    min-height : 100%;
+    position   : relative;
+}
+
+body {
+    background-color : #f1f1f1;
+    border-top       : 0.5em #ffb232 solid;
+    margin-bottom    : 3.5em;
+}
+
+.form-control:focus {
+    border-color : #ccc;
+    box-shadow   : none;
+}
+
+.footer {
+    position         : absolute;
+    bottom           : 0;
+    width            : 100%;
+    height           : 3em;
+    background-color : #ececec;
+}
+
+.footer .container {
+    margin-top : 0.75em;
+}
+
+.footer a:active, .footer a:hover, .footer a:focus {
+    color           : #333;
+    text-decoration : none;
+}
+
+.pagination li a,
+.pagination li a:hover,
+.pagination li a:focus,
+.pagination li a:active {
+    color : #333;
+}
+
+.pagination .active,
+.pagination .active a,
+.pagination .active a:hover,
+.pagination .active a:focus,
+.pagination .active a:active {
+    border-color     : #ccc;
+    background-color : #ffb232;
+}
+
+.compound { background-color : #59ABE3; color : #ffffff; }
+.gene     { background-color : #BF55EC; color : #ffffff; }
+.protein  { background-color : #F39C12; color : #ffffff; }
+.species  { background-color : #2ECC71; color : #ffffff; }
+.dna      { background-color : #E74C3C; color : #ffffff; }
+.rna      { background-color : #95A5A6; color : #ffffff; }
+.cellline { background-color : #96281B; color : #ffffff; }
+.celltype { background-color : #34495E; color : #ffffff; }
+.disease  { background-color : #222222; color : #ffffff; }
+.drug     { background-color : #D2527F; color : #ffffff; }

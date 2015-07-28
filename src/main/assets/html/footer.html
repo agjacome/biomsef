@@ -1,0 +1,24 @@
+<div class="container text-center" data-ng-controller="FooterController">
+    <div class="row">
+        <div class="col-xs-6">
+            <div data-ng-hide="loggedIn">
+                <a class="text-muted" href='login' data-tooltip="Sign In">
+                    <span class="fa fa-sign-in fa-lg"></span>
+                    <span class="hidden-xs">Sign In</a>
+                </a>
+            </div>
+            <div data-ng-show="loggedIn">
+                <a class="text-muted" href='admin' data-tooltip="Admin Panel">
+                    <span class="fa fa-user-md fa-lg"></span>
+                    <span class="hidden-xs">Admin</a>
+                </a>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <a class="text-muted" href='https://github.com/agjacome/biomsef' data-tooltip="Github">
+                <span class="fa fa-github fa-lg"></span>
+                <span class="hidden-xs">GitHub</span>
+            </a>
+        </div>
+    </div>
+</div>

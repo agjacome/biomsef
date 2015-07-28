@@ -1,0 +1,23 @@
+<div data-ng-include src='"assets/html/smallLogo.html"'></div>
+<div data-ng-include src='"assets/html/searchBar.html"'></div>
+<div data-ng-include src='"assets/html/errorMessage.html"'></div>
+
+<div data-ng-show="document">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-default document-panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title" data-ng-bind="document.title"></h3>
+                </div>
+                <div class="panel-body">
+                    <p data-ng-bind-html="htmlContent" data-dynamic></p>
+                </div>
+                <div data-ng-show="document.pubmedId" class="panel-footer">
+                    <a target="_blank" data-ng-href="http://www.ncbi.nlm.nih.gov/pubmed/{{ document.pubmedId }}" class="btn btn-default">
+                        <span class="fa fa-external-link fa-lg"></span> PubMedID: {{ document.pubmedId }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+.document-panel {
+    margin-top : 2em;
+}
+
+.document-panel .panel-body p {
+    line-height : 1.8em;
+    text-align  : justify;
+    white-space : pre-wrap;
+}
+
+.document-panel .annotation {
+    margin  : 0 0.25em;
+    padding : 0 0.25em;
+}
+
+.document-panel .annotation:hover {
+    cursor          : pointer;
+    text-decoration : none;
+}

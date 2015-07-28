@@ -1,0 +1,31 @@
+<div data-ng-include src='"assets/html/smallLogo.html"'></div>
+<div data-ng-include src='"assets/html/adminBar.html"'></div>
+<div data-ng-include src='"assets/html/errorMessage.html"'></div>
+
+<div class="row">
+    <div data-ng-show="loading" class="col-xs-12 text-center">
+        <span class="text-muted fa fa-spin fa-spinner fa-3x"></span>
+    </div>
+    <div data-ng-hide="loading" class="col-xs-12">
+        <form name="accountForm" accept-charset="UTF-8" role="form" data-ng-enter="createAccount()">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Create a new account</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group col-xs-12" data-ng-class="{ 'has-error' : account.email != '' && accountForm.email.$invalid }">
+                        <input name="email" placeholder="E-mail" class="form-control" data-ng-model="account.email" type="email" required autofocus>
+                    </div>
+                    <div class="form-group col-xs-12" data-ng-class="{ 'has-error' : account.pass != '' && accountForm.pass.$invalid }">
+                        <input name="password" placeholder="Password" class="form-control" data-ng-model="account.password" type="password" required>
+                    </div>
+                </div>
+                <div class="panel-footer text-center">
+                    <button class="btn btn-warning" type="button" data-ng-click="createAccount()" data-ng-disabled="accountForm.$invalid">
+                        Create account
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+*.class
+*.cache
+
+log
+target
+project/*
+!project/build.properties
+!project/plugins.sbt

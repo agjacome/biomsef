@@ -1,0 +1,41 @@
+@(baseRef: String)
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <base href="@baseRef">
+
+    <title data-ng-bind="pageTitle"></title>
+
+    <link rel="stylesheet" media="screen" href="@routes.AssetsController.versioned("lib/bootstrap/css/bootstrap.min.css")" />
+    <link rel="stylesheet" media="screen" href="@routes.AssetsController.versioned("lib/font-awesome/css/font-awesome.min.css")" />
+    <link rel="stylesheet" media="screen" href="@routes.AssetsController.versioned("css/main.css")">
+
+    <script data-main="@routes.AssetsController.versioned("js/main.js")" type="text/javascript" src="@routes.AssetsController.versioned("lib/requirejs/require.js")"></script>
+
+    @Html("""
+    <!-- http://trentwalton.com/2013/01/16/windows-phone-8-viewport-fix/ -->
+    <script>
+        if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+          var msViewportStyle = document.createElement("style");
+          msViewportStyle.appendChild(
+            document.createTextNode("@-ms-viewport{width:auto!important}")
+          );
+          document.getElementsByTagName("head")[0].
+            appendChild(msViewportStyle);
+        }
+    </script>
+    """)
+
+</head>
+<body>
+    <div class="container">
+        <div data-ng-view></div>
+    </div>
+    <div class="footer">
+        <div data-ng-include='"@routes.AssetsController.versioned("html/footer.html")"'></div>
+    </div>
+</body>
+</html>

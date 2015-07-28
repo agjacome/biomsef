@@ -1,0 +1,48 @@
+<div data-ng-include src='"assets/html/smallLogo.html"'></div>
+<div data-ng-include src='"assets/html/adminBar.html"'></div>
+<div data-ng-include src='"assets/html/errorMessage.html"'></div>
+
+<div data-ng-show="listing">
+    <div class="row pagination-row text-center">
+        <div class="col-xs-12">
+            <div data-pagination data-ng-model="pageNumber" data-ng-change="pageChanged()" data-total-items="listing.total" data-items-per-page="countPerPage" data-boundary-links="true" data-max-size="maxSize" class="pagination-sm"></div>
+        </div>
+    </div>
+    <div class="row account-list">
+        <div class="col-xs-12 table-responsive">
+            <table class="table table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th class="text-center"><a href="" data-ng-click="ordering = 'id'">#</a></th>
+                        <th class="text-center"><a href="" data-ng-click="ordering = 'email'">Email</a></th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-show="loading">
+                        <td class="text-center" colspan="3">
+                            <span class="text-muted fa fa-spin fa-spinner fa-3x"></span>
+                        </td>
+                    </tr>
+                    <tr data-ng-hide="loading" data-ng-model="listing" data-ng-repeat="a in listing.items | orderBy : ordering">
+                        <td class="text-center">{{ a.id }}</td>
+                        <td>{{ a.email }}</td>
+                        <td class="button-cell text-center">
+                            <a class="btn btn-primary" href="" data-ng-click="editAccount(a)">
+                                <span class="fa fa-trash-o fa-lg"></span> Edit
+                            </a>
+                            <a class="btn btn-warning" href="" data-ng-click="deleteAccount(a)" data-ng-disabled="cannotDelete(a)">
+                                <span class="fa fa-trash-o fa-lg"></span> Delete
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row pagination-row text-center">
+        <div class="col-xs-12">
+            <div data-pagination data-ng-model="pageNumber" data-ng-change="pageChanged()" data-total-items="listing.total;" data-items-per-page="countPerPage" data-boundary-links="true" data-max-size="maxSize" class="pagination-sm"></div>
+        </div>
+    </div>
+</div>

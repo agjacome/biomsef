@@ -1,0 +1,32 @@
+GET    /                             es.uvigo.ei.sing.biomsef.controller.ApplicationController.index(path = "")
+
+POST   /api/login                    es.uvigo.ei.sing.biomsef.controller.ApplicationController.login
+POST   /api/logout                   es.uvigo.ei.sing.biomsef.controller.ApplicationController.logout
+GET    /api/auth_ping                es.uvigo.ei.sing.biomsef.controller.ApplicationController.authPing
+
+GET    /api/user                     es.uvigo.ei.sing.biomsef.controller.UsersController.list(page: Option[Int], count: Option[Int])
+GET    /api/user/:id                 es.uvigo.ei.sing.biomsef.controller.UsersController.get(id: es.uvigo.ei.sing.biomsef.entity.User.ID)
+POST   /api/user                     es.uvigo.ei.sing.biomsef.controller.UsersController.add
+PUT    /api/user/:id                 es.uvigo.ei.sing.biomsef.controller.UsersController.edit(id: es.uvigo.ei.sing.biomsef.entity.User.ID)
+DELETE /api/user/:id                 es.uvigo.ei.sing.biomsef.controller.UsersController.delete(id: es.uvigo.ei.sing.biomsef.entity.User.ID)
+
+GET    /api/article                  es.uvigo.ei.sing.biomsef.controller.ArticlesController.list(page: Option[Int], count: Option[Int])
+GET    /api/article/:id              es.uvigo.ei.sing.biomsef.controller.ArticlesController.get(id: es.uvigo.ei.sing.biomsef.entity.Article.ID)
+POST   /api/article                  es.uvigo.ei.sing.biomsef.controller.ArticlesController.add
+DELETE /api/article/:id              es.uvigo.ei.sing.biomsef.controller.ArticlesController.delete(id: es.uvigo.ei.sing.biomsef.entity.Article.ID)
+
+GET    /api/keyword/:id              es.uvigo.ei.sing.biomsef.controller.KeywordsController.get(id: es.uvigo.ei.sing.biomsef.entity.Keyword.ID)
+GET    /api/annotation/:id           es.uvigo.ei.sing.biomsef.controller.AnnotationsController.get(id: es.uvigo.ei.sing.biomsef.entity.Annotation.ID)
+
+GET    /api/search                   es.uvigo.ei.sing.biomsef.controller.SearcherController.search(query: String, page: Option[Int], count: Option[Int])
+
+POST   /api/annotator/annotate       es.uvigo.ei.sing.biomsef.controller.AnnotatorController.annotate
+POST   /api/annotator/annotateOne    es.uvigo.ei.sing.biomsef.controller.AnnotatorController.annotateOne(id: es.uvigo.ei.sing.biomsef.entity.Article.ID)
+
+GET    /api/provider/pubmed/search   es.uvigo.ei.sing.biomsef.controller.PubMedProviderController.search(query: String, limit: Option[Int], page: Option[Int], count: Option[Int])
+POST   /api/provider/pubmed/download es.uvigo.ei.sing.biomsef.controller.PubMedProviderController.download
+
+GET    /assets/*file                 es.uvigo.ei.sing.biomsef.controller.AssetsController.versioned(path = "/public", file: Asset)
+
+GET    /*path/                       es.uvigo.ei.sing.biomsef.controller.ApplicationController.untrail(path)
+GET    /*path                        es.uvigo.ei.sing.biomsef.controller.ApplicationController.index(path)

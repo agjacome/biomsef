@@ -1,0 +1,92 @@
+<div data-ng-include src='"assets/html/smallLogo.html"'></div>
+<div data-ng-include src='"assets/html/searchBar.html"'></div>
+<div data-ng-include src='"assets/html/errorMessage.html"'></div>
+
+<div data-ng-hide="results" class="row text-center result-spinner">
+    <div class="col-xs-12">
+        <span class="text-muted fa fa-spin fa-spinner fa-3x"></span>
+    </div>
+</div>
+<div data-ng-show="results">
+    <div class="row text-center">
+        <div class="col-xs-12">
+            <div class="well well-sm">
+                Found a total of <strong>{{ results.total }}</strong> results for "<span ng-bind="terms"></span>".
+            </div>
+        </div>
+    </div>
+    <div class="row pagination-row text-center">
+        <div class="col-xs-12">
+            <div data-pagination data-ng-model="pageNumber" data-ng-change="pageChanged()" data-total-items="results.total" data-items-per-page="countPerPage" data-boundary-links="true" data-max-size="maxSize" class="pagination-sm"></div>
+        </div>
+    </div>
+    <div data-ng-show="loading" class="row text-center">
+        <div class="col-xs-12">
+            <span class="text-muted fa fa-spin fa-spinner fa-3x"></span>
+        </div>
+    </div>
+    <div data-ng-hide="loading" class="row result-list">
+        <div class="col-xs-12">
+            <tabset>
+                <tab heading="List view">
+                    <div id="list-mode">
+                        <!-- <div class="panel panel-default text-center category-filter" data-ng-model="categories"> -->
+                            <!-- <div class="panel-body"> -->
+                                <!-- <ul class="list-inline"> -->
+                                    <!-- <li data-ng-repeat="c in categories"> -->
+                                        <!-- <a data-ng-click="filterByCategory(c)"> -->
+                                            <!-- <span data-ng-class="{'selected' : c.selected }" class="keyword {{ c.name.toLowerCase() }}"> -->
+                                                <!-- {{ c.name }} -->
+                                            <!-- </span> -->
+                                        <!-- </a> -->
+                                    <!-- </li> -->
+                                <!-- </ul> -->
+                            <!-- </div> -->
+                        <!-- </div> -->
+                        <div class="panel panel-default" data-ng-model="results" data-ng-repeat="r in results.items">
+                            <a href='' data-ng-click="goToDocument(r.article)" class="title">
+                                <div class="panel-body">{{ r.article.title }}</div>
+                            </a>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-6 col-md-3" data-ng-repeat="k in r.keywords"> 
+                                        <span data-ng-class="['keyword', k.category.toLowerCase()]" data-tooltip="{{ k.category }}">
+                                            {{ k.normalized }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+                <tab select="refreshGraph()" heading="Graph view">
+                    <div id="graph-mode" data-ng-model="categories">
+                        <div class="panel panel-default text-center category-filter">
+                            <div class="panel-body">
+                                <ul class="list-inline">
+                                    <li data-ng-repeat="c in categories">
+                                        <a data-ng-click="filterByCategory(c)">
+                                            <span data-ng-class="{'selected' : c.selected }" class="keyword {{ c.name.toLowerCase() }}">
+                                                {{ c.name }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div id="graph-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+    <div class="row pagination-row text-center">
+        <div class="col-xs-12">
+            <div data-pagination data-ng-model="pageNumber" data-ng-change="pageChanged()" data-total-items="results.total" data-items-per-page="countPerPage" data-boundary-links="true" data-max-size="maxSize" class="pagination-sm"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,92 @@
+<div data-ng-include src='"assets/html/smallLogo.html"'></div>
+<div data-ng-include src='"assets/html/adminBar.html"'></div>
+<div data-ng-include src='"assets/html/errorMessage.html"'></div>
+
+<div class="row">
+    <div data-ng-show="downloading" class="col-xs-12 text-center">
+        <span class="text-muted fa fa-spin fa-spinner fa-3x"></span>
+    </div>
+    <div data-ng-hide="downloading" class="col-xs-12">
+        <form name="downloadForm" accept-charset="UTF-8" role="form" data-ng-enter="download()">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Download documents from PubMed</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group col-xs-12" data-ng-class="{ 'has-error' : ids != ''  && !validIds() }">
+                        <span class="help-block">Comma-separated list of PMIDs, eg: <em>1234, 5678, 9101112</em></span>
+                        <input name="ids" placeholder="PubMed IDs" class="form-control" data-ng-model="ids" type="text" required>
+                    </div>
+                </div>
+                <div class="panel-footer text-center">
+                    <button class="btn btn-warning" type="button" data-ng-click="download()" data-ng-disabled="downloadForm.$invalid || !validIds()">
+                        <span class="fa fa-download fa-lg"></span> Download documents
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <form name="searchForm" accept-charset="UTF-8" role="search" data-ng-enter="searchIDs()">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Search documents in PubMed</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group col-sm-12 col-md-9" data-ng-class="{ 'has-error' : search.terms != '' && searchForm.terms.$invalid }">
+                        <input type="search" class="form-control" name="terms" data-ng-model="search.terms" placeholder="Search terms" required>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-3" data-ng-class="{ 'has-error' : searchForm.limit.$invalid }">
+                        <input type="number" class="form-control" data-min="1" name="limit" data-ng-model="search.limit" placeholder="In last days (optional)">
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-warning" type="button" data-ng-click="searchIDs()" data-ng-disabled="searchForm.$invalid">
+                            <span class="fa fa-search fa-lg"></span> Search documents
+                        </button>
+                    </div>
+                    <div data-ng-show="loading && !searchResults" class="row text-center">
+                        <div class="col-xs-12">
+                            <span class="text-muted fa fa-spin fa-spinner fa-3x"></span>
+                        </div>
+                    </div>
+                    <div class="row" data-ng-show="searchResults">
+                        <div class="col-xs-12">
+                            <div class="row pagination-row text-center">
+                                <div class="col-xs-12">
+                                    <div data-pagination data-ng-model="pageNumber" data-ng-change="pageChanged()" data-total-items="searchResults.total" data-items-per-page="countPerPage" data-boundary-links="true" data-max-size="maxSize" class="pagination-sm"></div>
+                                </div>
+                            </div>
+                            <div data-ng-show="loading" class="row text-center">
+                                <div class="col-xs-12">
+                                    <span class="text-muted fa fa-spin fa-spinner fa-3x"></span>
+                                </div>
+                            </div>
+                            <div data-ng-hide="loading" class="row">
+                                <div data-ng-model="searchResults" data-ng-repeat="pmid in searchResults.items">
+                                    <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                                        <div class="btn-group">
+                                            <a href=''
+                                                data-ng-click="addToDownloadIds(pmid)" class="btn btn-primary">
+                                                <span class="fa fa-plus fa-fw"></span>
+                                            </a>
+                                            <a target="_blank" data-ng-href="http://www.ncbi.nlm.nih.gov/pubmed/{{ pmid }}" class="btn btn-default">
+                                                <span class="fa fa-external-link fa-fw"></span> PMID {{ pmid }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pagination-row text-center">
+                                <div class="col-xs-12">
+                                    <div data-pagination data-ng-model="pageNumber" data-ng-change="pageChanged()" data-total-items="searchResults.total" data-items-per-page="countPerPage" data-boundary-links="true" data-max-size="maxSize" class="pagination-sm"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
