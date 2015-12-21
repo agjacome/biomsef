@@ -19,6 +19,7 @@ GET    /api/keyword/:id              es.uvigo.ei.sing.biomsef.controller.Keyword
 GET    /api/annotation/:id           es.uvigo.ei.sing.biomsef.controller.AnnotationsController.get(id: es.uvigo.ei.sing.biomsef.entity.Annotation.ID)
 
 GET    /api/search                   es.uvigo.ei.sing.biomsef.controller.SearcherController.search(query: String, page: Option[Int], count: Option[Int])
+GET    /api/advSearch                es.uvigo.ei.sing.biomsef.controller.SearcherController.advSearch(query: String, page: Option[Int], count: Option[Int], categories: List[es.uvigo.ei.sing.biomsef.entity.Category], fromYear: Long, toYear: Long)
 
 POST   /api/annotator/annotate       es.uvigo.ei.sing.biomsef.controller.AnnotatorController.annotate
 POST   /api/annotator/annotateOne    es.uvigo.ei.sing.biomsef.controller.AnnotatorController.annotateOne(id: es.uvigo.ei.sing.biomsef.entity.Article.ID)

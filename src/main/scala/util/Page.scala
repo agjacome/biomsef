@@ -4,15 +4,18 @@ package util
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
-final case class Page[A](items: Seq[A], page: Int, offset: Int, total: Int) {
+final case class Page[A](items: List[A], page: Int, offset: Int, total: Int) {
   lazy val prev: Option[Int] = Option(page - 1).filter(_ >= 0)
   lazy val next: Option[Int] = Option(page + 1).filter(_ => (offset + items.size) < total)
 }
 
 object Page {
 
+  def apply[A](items: Seq[A], page: Int, offset: Int, total: Int): Page[A] =
+    new Page(items.toList, page, offset, total)
+
   implicit def PageWrites[A](implicit aWrites: Writes[A]): Writes[Page[A]] = (
-    (__ \ 'items).write[Seq[A]] and
+    (__ \ 'items).write[List[A]] and
     (__ \ 'page).write[Int] and
     (__ \ 'offset).write[Int] and
     (__ \ 'total).write[Int] and

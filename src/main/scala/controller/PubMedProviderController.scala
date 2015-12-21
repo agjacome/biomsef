@@ -29,7 +29,7 @@ object PubMedProviderController extends Controller with Authorization {
     AuthorizedAsyncAction(parse.json) { _ => request => 
       (request.body \ "ids").validate[Set[Article.PMID]].fold(
         errors => Future.successful(BadRequest(Json.obj("err" -> errors.mkString("\n")))),
-        ids    => pubmed.download(ids).map(articles => Ok(Json.toJson(articles)))
+        ids    => pubmed.download(ids).map(articles => Ok(Json.toJson(articles.map(_.id))))
       )
     }
 

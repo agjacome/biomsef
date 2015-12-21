@@ -33,7 +33,7 @@ object User extends ((Option[Long], String, String) => User) {
 
   implicit val UserForm: Form[User] = Form {
     mapping(
-      "email" -> email, "password" -> nonEmptyText
+      "email" -> email, "pass" -> nonEmptyText
     )(User.apply)(u => Some((u.email, u.pass)))
   }
 

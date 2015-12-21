@@ -5,6 +5,7 @@ define(['./main'], function(controller) {
         scope.document    = data.article;
         scope.keywords    = data.keywords;
         scope.annotations = data.annotations;
+        scope.authors     = data.authors;
 
         minimizeCompounds(scope.keywords);
         annotateDocumentText(scope.document, scope.keywords, scope.annotations);
@@ -22,6 +23,8 @@ define(['./main'], function(controller) {
             var keyword = findById(keywords, annotation.keyword);
             doc.content = addAnnotation(doc.content, annotation, keyword);
         });
+        doc.title   = doc.content.substring(0, doc.content.indexOf('\n'));
+        doc.content = "<span class='section-title'>Abstract: </span>" + doc.content.substring(doc.content.indexOf('\n') + 1)
     };
 
     var filterDuplicateStartPositions = function(annotations) {
@@ -84,6 +87,7 @@ define(['./main'], function(controller) {
                     $rootScope.pageTitle = data.article.title + $rootScope.pageTitle;
                     success(data, $scope, $sce);
 
+                    $scope.htmlTitle   = $sce.trustAsHtml($scope.document.title);
                     $scope.htmlContent = $sce.trustAsHtml($scope.document.content);
                 },
                 function(response) {

@@ -15,7 +15,7 @@ define(['./main'], function(controller) {
                 );
             }
 
-            $scope.credentials = { email : '', password : '' };
+            $scope.credentials = { email : '', pass : '' };
 
             $scope.login = function( ) {
                 if ($scope.loginForm.$valid) {

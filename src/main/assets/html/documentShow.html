@@ -7,10 +7,19 @@
         <div class="col-xs-12">
             <div class="panel panel-default document-panel">
                 <div class="panel-heading">
-                    <h3 class="panel-title" data-ng-bind="document.title"></h3>
+                    <h3 class="panel-title" data-ng-bind-html="htmlTitle" data-dynamic></h3>
                 </div>
                 <div class="panel-body">
-                    <p data-ng-bind-html="htmlContent" data-dynamic></p>
+                    <div class="year" data-ng-model="document.year">
+                        <span class="section-title">Year: </span><span>{{ document.year }}</span>
+                    </div>
+                    <div class="authors" data-ng-model="authors">
+                        <span class="section-title">Authors: </span>
+                        <span data-ng-repeat="a in authors">{{ a.firstName }} {{ a.lastName }}<span ng-hide="$last">, </span></span>
+                    </div>
+                    <div class="content">
+                        <p data-ng-bind-html="htmlContent" data-dynamic></p>
+                    </div>
                 </div>
                 <div data-ng-show="document.pubmedId" class="panel-footer">
                     <a target="_blank" data-ng-href="http://www.ncbi.nlm.nih.gov/pubmed/{{ document.pubmedId }}" class="btn btn-default">

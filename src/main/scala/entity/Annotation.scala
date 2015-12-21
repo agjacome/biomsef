@@ -22,11 +22,12 @@ object Annotation extends ((Option[Long], Article.ID, Keyword.ID, String, Long, 
 
 final case class AnnotatedArticle (
   article:     Article,
+  authors:     List[Author],
   annotations: Set[Annotation],
   keywords:    Set[Keyword]
 )
 
-object AnnotatedArticle extends ((Article, Set[Annotation], Set[Keyword]) => AnnotatedArticle) {
+object AnnotatedArticle extends ((Article, List[Author], Set[Annotation], Set[Keyword]) => AnnotatedArticle) {
 
   implicit val AnnotatedArticleWrites: Writes[AnnotatedArticle] = Json.writes[AnnotatedArticle]
 

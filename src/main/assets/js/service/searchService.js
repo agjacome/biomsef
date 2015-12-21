@@ -11,6 +11,18 @@ define(['./main'], function(service) {
                         count: count
                     }
                 });
+            },
+            advSearch : function(terms, page, count, cats, from, to) {
+                return $http.get('api/advSearch', {
+                    params: {
+                        query     : terms,
+                        page      : page,
+                        count     : count,
+                        categories: cats,
+                        fromYear  : from,
+                        toYear    : to
+                    }
+                });
             }
         }
     }]);

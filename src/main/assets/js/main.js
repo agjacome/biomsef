@@ -13,17 +13,19 @@
             'angular-cookies'   : ['../lib/angularjs/angular-cookies'],
             'angular-resource'  : ['../lib/angularjs/angular-resource'],
             'angular-route'     : ['../lib/angularjs/angular-route'],
+            'ng-tags-input'     : ['../lib/ng-tags-input/ng-tags-input'],
             'bootstrap'         : ['../lib/bootstrap/js/bootstrap'],
             'underscore'        : ['../lib/underscorejs/underscore'],
             'ui-bootstrap'      : ['../lib/angular-ui-bootstrap/ui-bootstrap'],
             'ui-bootstrap-tpls' : ['../lib/angular-ui-bootstrap/ui-bootstrap-tpls'],
-            'sigma'             : ['../lib/sigma.js/sigma.min'],
+            'cytoscape'         : 'cytoscape/cytoscape.min'
         },
         shim: {
             'angular'           : { deps: ['jquery'], exports: 'angular' },
             'angular-cookies'   : ['angular'],
             'angular-resource'  : ['angular'],
             'angular-route'     : ['angular'],
+            'ng-tags-input'     : ['angular'],
             'bootstrap'         : ['jquery'],
             'ui-bootstrap'      : ['bootstrap', 'angular'],
             'ui-bootstrap-tpls' : ['bootstrap', 'angular'],
@@ -32,10 +34,10 @@
 
     require([
         'angular',
+        'cytoscape',
         'jquery',
         'underscore',
         'bootstrap',
-        'sigma',
         './app',
         './routes',
         './util'

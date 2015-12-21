@@ -32,8 +32,7 @@
 @media(max-height : 200px) { .home-search { margin-top :     0; } }
 @media(min-height : 200px) { .home-search { margin-top : 1.5em; } }
 
-search .input-group, .home-search .alert {
+.home-search .input-group, .home-search .alert {
     width  : 95%;
     margin : 0 auto;
 }
-

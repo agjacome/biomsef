@@ -13,8 +13,8 @@
                         <div class="form-group col-xs-12" data-ng-class="{ 'has-error': credentials.email != '' && loginForm.email.$invalid }">
                             <input name="email" placeholder="E-mail" class="form-control" data-ng-model="credentials.email" type="email" required autofocus>
                         </div>
-                        <div class="form-group col-xs-12" data-ng-class="{ 'has-error': credentials.password != '' && loginForm.password.$error.required }">
-                            <input name="password" placeholder="Password" class="form-control" data-ng-model="credentials.password" type="password" required>
+                        <div class="form-group col-xs-12" data-ng-class="{ 'has-error': credentials.pass != '' && loginForm.password.$error.required }">
+                            <input name="password" placeholder="Password" class="form-control" data-ng-model="credentials.pass" type="password" required>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-danger" type="button" data-ng-click="login()" data-ng-disabled="loginForm.$invalid">

@@ -1,8 +1,10 @@
 define([
     'angular',
+    'cytoscape',
     'angular-cookies',
     'angular-resource',
     'angular-route',
+    'ng-tags-input',
     'ui-bootstrap',
     'ui-bootstrap-tpls',
     './controller/index',
@@ -12,7 +14,7 @@ define([
 ], function(angular) {
 
     var app = angular.module('biomsef', [
-        'ngCookies', 'ngRoute', 'ngResource',
+        'ngCookies', 'ngRoute', 'ngResource', 'ngTagsInput',
         'ui.bootstrap', 'ui.bootstrap.tpls',
         'biomsef.controller',
         'biomsef.directive',
@@ -24,9 +26,33 @@ define([
 
         var keepError = false;
 
+        $rootScope.years = [];
+        for (var i = 1900; i <= new Date().getFullYear() + 1; ++i) {
+            $rootScope.years.push(i);
+        }
+
+        $rootScope.categoryTags = [
+            { text: 'Compound' },
+            { text: 'Gene'     },
+            { text: 'Protein'  },
+            { text: 'Species'  },
+            { text: 'DNA'      },
+            { text: 'RNA'      },
+            { text: 'CellLine' },
+            { text: 'CellType' },
+            { text: 'Disease'  },
+            { text: 'Drug'     }
+        ];
+
+        $rootScope.categoryAutoComplete = function($query) {
+            return _.filter($rootScope.categoryTags, function(cat) {
+                return cat.text.toLowerCase().indexOf($query.toLowerCase()) != -1;
+            });
+        };
+
         $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
             if (keepError) keepError = false; else $rootScope.error = false;
-            $rootScope.pageTitle = (current.$$route && current.$$route.pageTitle) || 'BiomSEF';
+            $rootScope.pageTitle = (current.$$route && current.$$route.pageTitle) || 'Biomsef';
         });
 
         $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
@@ -46,7 +72,6 @@ define([
             $location.path(path);
             $location.url($location.path());
         }
-
 
     }]);
 

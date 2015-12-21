@@ -76,3 +76,11 @@ body {
 .celltype { background-color : #34495E; color : #ffffff; }
 .disease  { background-color : #222222; color : #ffffff; }
 .drug     { background-color : #D2527F; color : #ffffff; }
+
+#resultList a.title:hover {
+    text-decoration: none;
+}
+
+#resultList h4 {
+    font-size: 1.15em;
+}

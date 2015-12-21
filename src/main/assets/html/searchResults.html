@@ -11,7 +11,7 @@
     <div class="row text-center">
         <div class="col-xs-12">
             <div class="well well-sm">
-                Found a total of <strong>{{ results.total }}</strong> results for "<span ng-bind="terms"></span>".
+                SDS has found a total of <strong>{{ results.total }}</strong> articles for the search query "<span ng-bind="terms"></span>".
             </div>
         </div>
     </div>
@@ -28,24 +28,26 @@
     <div data-ng-hide="loading" class="row result-list">
         <div class="col-xs-12">
             <tabset>
-                <tab heading="List view">
+                <tab heading="Article list">
                     <div id="list-mode">
-                        <!-- <div class="panel panel-default text-center category-filter" data-ng-model="categories"> -->
-                            <!-- <div class="panel-body"> -->
-                                <!-- <ul class="list-inline"> -->
-                                    <!-- <li data-ng-repeat="c in categories"> -->
-                                        <!-- <a data-ng-click="filterByCategory(c)"> -->
-                                            <!-- <span data-ng-class="{'selected' : c.selected }" class="keyword {{ c.name.toLowerCase() }}"> -->
-                                                <!-- {{ c.name }} -->
-                                            <!-- </span> -->
-                                        <!-- </a> -->
-                                    <!-- </li> -->
-                                <!-- </ul> -->
-                            <!-- </div> -->
-                        <!-- </div> -->
-                        <div class="panel panel-default" data-ng-model="results" data-ng-repeat="r in results.items">
+                        <div class="panel panel-default text-center category-filter" data-ng-model="categories">
+                            <div class="panel-body">
+                                <ul class="list-inline">
+                                    <li data-ng-repeat="c in categories">
+                                        <a data-ng-click="filterByCategoryList(c)">
+                                            <span data-ng-class="{'selected' : c.selected }" class="keyword {{ c.name.toLowerCase() }}">
+                                                {{ c.name }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="resultList" class="panel panel-default" data-ng-model="results" data-ng-repeat="r in results.items">
                             <a href='' data-ng-click="goToDocument(r.article)" class="title">
-                                <div class="panel-body">{{ r.article.title }}</div>
+                                <div class="panel-body">
+                                    <h4>{{ r.article.title }}<br /><small>[aggregated tf-idf score: {{ r.tfidf.toFixed(3) }}]</small></h4>
+                                </div>
                             </a>
                             <div class="panel-footer">
                                 <div class="row">
@@ -59,7 +61,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab select="refreshGraph()" heading="Graph view">
+                <tab select="refreshGraph()" heading="Concepts graph">
                     <div id="graph-mode" data-ng-model="categories">
                         <div class="panel panel-default text-center category-filter">
                             <div class="panel-body">
@@ -77,6 +79,22 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div id="graph-container"></div>
+                            </div>
+                        </div>
+                        <div data-ng-show="filteredResults" class="result-list" id="filteredResults">
+                            <div class="panel panel-default" data-ng-model="filteredResults" data-ng-repeat="r in filteredResults">
+                                <a href='' data-ng-click="goToDocument(r.article)" class="title">
+                                    <div class="panel-body">{{ r.article.title }}</div>
+                                </a>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6 col-md-3" data-ng-repeat="k in r.keywords"> 
+                                            <span data-ng-class="['keyword', k.category.toLowerCase()]" data-tooltip="{{ k.category }}">
+                                                {{ k.normalized }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

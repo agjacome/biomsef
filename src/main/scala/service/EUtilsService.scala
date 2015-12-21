@@ -23,7 +23,7 @@ final class EUtilsService {
     }
   }
 
-  def fetchPubMedArticles(pmids: Set[Article.PMID]): Future[Set[Article]] =
+  def fetchPubMedArticles(pmids: Set[Article.PMID]): Future[Set[(Article, List[Author])]] =
     fetch("pubmed", pmids, "abstract").map(parseResultArticles).map(_.toSet)
 
   def serviceURL(service: String): String =
@@ -55,15 +55,26 @@ final class EUtilsService {
   private def idList(result: XMLElement): Seq[Article.PMID] =
     (result \ "IdList" \ "Id").map(_.text).map(_.toLong)
 
-  private def parseResultArticles(result: XMLElement): Seq[Article] =
+  private def parseResultArticles(result: XMLElement): Seq[(Article, List[Author])] =
     (result \ "PubmedArticle").map(parseArticle).flatten
 
-  private def parseArticle(article: XMLNode): Option[Article] =
+  private def parseArticle(article: XMLNode): Option[(Article, List[Author])] =
     for {
       pmid  <- (article \\ "PMID").headOption.map(_.text.toLong)
       title <- (article \\ "ArticleTitle").headOption.map(_.text.dropRight(1))
       abstr <- (article \\ "AbstractText").headOption.map(_.text)
-    } yield Article(Some(pmid), title, title + "." + System.lineSeparator + abstr)
+      year  <- (article \\ "PubDate" \\ "Year").headOption.map(_.text.toLong)
+      auths <- Option(parseAuthors(article))
+    } yield (Article(Some(pmid), title, title + "." + System.lineSeparator + abstr, year), auths)
+
+  private def parseAuthors(article: XMLNode): List[Author] =
+    ((article \\ "Author") map { auth ⇒
+      for {
+        last <- (auth \\ "LastName").headOption.map(_.text)
+        frst <- (auth \\ "ForeName").headOption.map(_.text)
+        init <- (auth \\ "Initials").headOption.map(_.text)
+      } yield Author(last, frst, init)
+    }).toList.flatten
 
   private def parseScientificName(result: XMLElement): Option[String] =
     (result \\ "Item").filter(_.attribute("Name").exists(_.text == "ScientificName")).headOption.map(_.text)

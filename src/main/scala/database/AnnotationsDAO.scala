@@ -13,7 +13,7 @@ import entity._
 import util.Page
 
 trait AnnotationsComponent {
-  self: ArticlesComponent with KeywordsComponent with HasDatabaseConfig[JdbcProfile] =>
+  self: ArticlesComponent with KeywordsComponent with AuthorsComponent with ArticleAuthorsComponent with HasDatabaseConfig[JdbcProfile] =>
 
   import driver.api._
 
@@ -35,7 +35,7 @@ trait AnnotationsComponent {
 
 }
 
-final class AnnotationsDAO extends AnnotationsComponent with ArticlesComponent with KeywordsComponent with HasDatabaseConfig[JdbcProfile] {
+final class AnnotationsDAO extends AnnotationsComponent with ArticlesComponent with KeywordsComponent with AuthorsComponent with ArticleAuthorsComponent with HasDatabaseConfig[JdbcProfile] {
 
   import driver.api._
   import AnnotationsDAO._
@@ -65,14 +65,25 @@ final class AnnotationsDAO extends AnnotationsComponent with ArticlesComponent w
       if article.id === id
     } yield (article, keyword, annotation)
 
-    val query = joined.sortBy(_._1.id)
+    val articleAuthors = for {
+      authoring <- this.articleAuthors
+      author    <- authors if authoring.authorId === author.id && authoring.articleId === id
+    } yield (author, authoring.position)
 
-    db.run(query.result) map { tuples =>
+    val query       = joined.sortBy(_._1.id)
+    val authorQuery = articleAuthors.sortBy(_._2).map(_._1)
+
+    val executed = for {
+      tuples  <- db.run(query.result)
+      authors <- db.run(authorQuery.result)
+    } yield (tuples, authors)
+
+    executed map { case (tuples, authors) =>
       val keywords    = tuples.map(_._2).toSet
       val annotations = tuples.map(_._3).toSet
       val article     = tuples.headOption.map(_._1)
 
-      article.map(a => AnnotatedArticle(a, annotations, keywords))
+      article.map(a => AnnotatedArticle(a, authors.toList, annotations, keywords))
     }
   }
 

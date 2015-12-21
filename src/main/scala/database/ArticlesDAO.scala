@@ -21,12 +21,13 @@ trait ArticlesComponent { self: HasDatabaseConfig[JdbcProfile] =>
     def pubmedId     = column[Option[Article.PMID]]("article_pmid")
     def title        = column[String]("article_title")
     def content      = column[String]("article_content")
+    def year         = column[Long]("article_year")
     def isAnnotated  = column[Boolean]("article_is_annotated")
     def isProcessing = column[Boolean]("article_is_processing")
 
     def unique_pubmedid = index("idx_article_unique_pmid", pubmedId, unique = true)
 
-    def * = (id.?, pubmedId, title, content, isAnnotated, isProcessing) <> (Article.tupled, Article.unapply)
+    def * = (id.?, pubmedId, title, content, year, isAnnotated, isProcessing) <> (Article.tupled, Article.unapply)
   }
 
   lazy val articles = TableQuery[Articles]

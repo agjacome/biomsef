@@ -1,12 +1,39 @@
 <div class="row search">
     <div class="col-xs-12">
-        <form accept-charset="UTF-8" role="search" data-ng-controller="SearchController" data-ng-submit="search()" novalidate>
+        <form accept-charset="UTF-8" role="search" data-ng-controller="SearchController" data-ng-enter="search()" novalidate>
             <div class="input-group input-group-lg">
                 <input type="search" class="form-control" data-ng-model="terms">
                 <div class="input-group-btn">
                     <button class="btn btn-danger" type="button" data-ng-click="search()">
                         <span class="fa fa-search fa-lg"></span>
                     </button>
+                </div>
+            </div>
+            <div class="adv-search">
+                <div class="adv-search-link">
+                    <p class="text-right">
+                        <a class="btn" role="button" data-toggle="collapse" href="#adv-search-inputs" aria-expanded="false" aria-controls="adv-search-inputs">
+                            Advanced Search
+                        </a>
+                    </p>
+                </div>
+                <div class="collapse in" id="adv-search-inputs">
+                    <div class="form-group col-xs-12">
+                        <label for="categories-input">Only include categories: </label>
+                        <tags-input data-ng-model="selectedTagCategories" placeholder="Add some categories">
+                            <auto-complete source="categoryAutoComplete($query)" min-length="0" load-on-empty="true"></auto-complete>
+                        </tags-input>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="from-year-input">From year: </label>
+                        <select id="from-year-input" class="form-control" data-ng-model="fromYear" data-ng-options="year for year in years">
+                        </select>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="to-year-input">To year: </label>
+                        <select id="to-year-input" class="form-control" data-ng-model="toYear" data-ng-options="year for year in years">
+                        </select>
+                    </div>
                 </div>
             </div>
         </form>

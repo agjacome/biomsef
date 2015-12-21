@@ -18,14 +18,11 @@ trait AuthorsComponent { self: HasDatabaseConfig[JdbcProfile] =>
 
   class Authors(tag: Tag) extends Table[Author](tag, "authors") {
     def id        = column[Author.ID]("author_id", O.PrimaryKey, O.AutoInc)
-    def pubmedId  = column[Option[Author.PMID]]("author_pmid")
     def lastName  = column[String]("author_last_name")
     def firstName = column[String]("author_first_name")
     def initials  = column[String]("author_initials")
 
-    def unique_pubmedid = index("idx_author_unique_pmid", pubmedId, unique = true)
-
-    def * = (id.?, pubmedId, lastName, firstName, initials) <> (Author.tupled, Author.unapply)
+    def * = (id.?, lastName, firstName, initials) <> (Author.tupled, Author.unapply)
   }
 
   lazy val authors = TableQuery[Authors]
@@ -54,8 +51,12 @@ final class AuthorsDAO extends AuthorsComponent with HasDatabaseConfig[JdbcProfi
   def get(id: Author.ID): Future[Option[Author]] =
     db.run(authors.filter(_.id === id).result.headOption)
 
-  def getByPubmedID(pubmedId: Long): Future[Option[Author]] =
-    db.run(authors.filter(_.pubmedId === pubmedId).result.headOption)
+  def getByName(lastName: String, firstName: String, initials: String): Future[Option[Author]] =
+    db.run(authors.filter(a ⇒
+      a.lastName.toLowerCase  === lastName.toLowerCase  &&
+      a.firstName.toLowerCase === firstName.toLowerCase &&
+      a.initials.toLowerCase  === initials.toLowerCase
+    ).result.headOption)
 
   def list(page: Int = 0, pageSize: Int = 10, orderBy: OrderBy = OrderByID, filter: Filter = Filter()): Future[Page[Author]] = {
     val offset = pageSize * page
@@ -120,12 +121,6 @@ object AuthorsDAO {
     type ColumnType = Long
     val order: Authors => ColumnOrdered[ColumnType] =
       author => ColumnOrdered(author.id, Ordering(Asc, NullsDefault))
-  }
-
-  case object OrderByPMID extends OrderBy {
-    type ColumnType = Option[Long]
-    val order: Authors => ColumnOrdered[ColumnType] =
-      author => ColumnOrdered(author.pubmedId, Ordering(Asc, NullsLast))
   }
 
   case object OrderByFirstName extends OrderBy {

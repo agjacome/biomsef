@@ -24,35 +24,31 @@ scalacOptions ++= Seq(
 
 libraryDependencies ++= Seq(
   // scala lang modules
-  "org.scala-lang.modules" %% "scala-xml" % "1.0.4" ,
+  "org.scala-lang.modules" %% "scala-xml" % "1.0.5" ,
 
   // core java/scala
-  "com.typesafe.slick"      %% "slick"                 % "3.0.0"  ,
-  "com.typesafe.akka"       %% "akka-actor"            % "2.3.11" ,
-  "com.typesafe.play"       %% "play-cache"            % "2.4.2"  ,
-  "com.typesafe.play"       %% "play-slick"            % "1.0.0"  ,
-  "com.typesafe.play"       %% "play-slick-evolutions" % "1.0.0"  ,
-  "com.github.t3hnar"       %% "scala-bcrypt"          % "2.4"    ,
+  "com.typesafe.slick"      %% "slick"                 % "3.0.3"  ,
+  "com.typesafe.akka"       %% "akka-actor"            % "2.3.14" ,
+  "com.typesafe.play"       %% "play-cache"            % "2.4.3"  ,
+  "com.typesafe.play"       %% "play-slick"            % "1.0.1"  ,
+  "com.typesafe.play"       %% "play-slick-evolutions" % "1.0.1"  ,
+  "com.github.t3hnar"       %% "scala-bcrypt"          % "2.5"    ,
   "net.databinder.dispatch" %% "dispatch-core"         % "0.11.3" ,
 
   // database connectors
-  "com.h2database" % "h2" % "1.4.187" ,
+  "mysql"            % "mysql-connector-java" % "5.1.36"  ,
+  "org.mariadb.jdbc" % "mariadb-java-client"  % "1.1.8"   ,
+  "com.h2database"   % "h2"                   % "1.4.187" ,
 
   // css/javascript
-  "org.webjars" % "angularjs"            % "1.3.15"  exclude("org.webjars", "jquery") ,
-  "org.webjars" % "bootstrap"            % "3.1.1-1" exclude("org.webjars", "jquery") ,
-  "org.webjars" % "jquery"               % "1.11.3"  ,
-  "org.webjars" % "underscorejs"         % "1.8.3"   ,
-  "org.webjars" % "requirejs"            % "2.1.17"  ,
-  "org.webjars" % "angular-ui-bootstrap" % "0.13.0"  ,
-  "org.webjars" % "font-awesome"         % "4.3.0-2" ,
-  "org.webjars" % "sigma.js"             % "1.0.3"
-
-  // testing
-  "org.scalatest"     %% "scalatest"    % "2.2.5"   % "test" ,
-  "org.scalacheck"    %% "scalacheck"   % "1.12.3"  % "test" ,
-  "com.typesafe.akka" %% "akka-testkit" % "2.3.11"  % "test" ,
-  "org.mockito"       %  "mockito-core" % "1.10.19" % "test"
+  "org.webjars" % "angularjs"            % "1.3.17" exclude("org.webjars", "jquery") ,
+  "org.webjars" % "bootstrap"            % "3.1.1"  exclude("org.webjars", "jquery") ,
+  "org.webjars" % "jquery"               % "1.11.3" ,
+  "org.webjars" % "underscorejs"         % "1.8.3"  ,
+  "org.webjars" % "requirejs"            % "2.1.20" ,
+  "org.webjars" % "angular-ui-bootstrap" % "0.13.4" ,
+  "org.webjars" % "font-awesome"         % "4.4.0"  ,
+  "org.webjars" % "ng-tags-input"        % "2.3.0"
 )
 
 import PlayKeys.playPackageAssets
@@ -77,3 +73,5 @@ templateImports += "es.uvigo.ei.sing.biomsef.controller._"
 
 mainClass     in assembly := Some("play.core.server.NettyServer")
 fullClasspath in assembly += Attributed.blank(playPackageAssets.value)
+
+shellPrompt := { _ => "biomsef » " }

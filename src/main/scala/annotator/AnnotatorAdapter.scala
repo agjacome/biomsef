@@ -39,6 +39,6 @@ trait AnnotatorAdapter extends Actor {
     })(Future.successful))
 
   protected final def getOrStoreKeyword(normalized: String, category: Category): Future[Keyword] =
-    keywordsDAO.getByNormalizedOrInsert(normalized, Keyword(None, normalized, category))
+    keywordsDAO.getOrInsert(normalized, category, Keyword(None, normalized, category))
 
 }

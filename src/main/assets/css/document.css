@@ -2,10 +2,35 @@
     margin-top : 2em;
 }
 
-.document-panel .panel-body p {
+.document-panel .section-title {
+    font-weight: bold;
+}
+
+.document-panel .year {
+    margin-top: 3px;
+    margin-bottom: 10px;
+}
+
+.document-panel .authors {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.document-panel .content {
+    margin-top: 10px;
+    margin-bottom: 3px;
+}
+
+.document-panel .content span ,
+.document-panel .authors span {
     line-height : 1.8em;
-    text-align  : justify;
     white-space : pre-wrap;
+}
+
+.document-panel .content p {
+    line-height : 1.8em;
+    white-space : pre-wrap;
+    text-align  : justify;
 }
 
 .document-panel .annotation {

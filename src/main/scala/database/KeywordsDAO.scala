@@ -65,10 +65,17 @@ final class KeywordsDAO extends KeywordsComponent with HasDatabaseConfig[JdbcPro
     } yield Page(result, page, offset, total)
   }
 
-  def getByNormalizedOrInsert(normalized: String, keyword: => Keyword): Future[Keyword] = {
-    val query = keywords.filter(_.normalized.toLowerCase === normalized.toLowerCase).result.headOption flatMap {
-      case Some(k) => DBIO.successful(k)
-      case None    => ((keywords returning keywords.map(_.id) into ((keyword, id) => keyword.copy(id = Some(id)))) += keyword)
+  def getOrInsert(norm: String, cat: Category, keyword: => Keyword): Future[Keyword] = {
+    def insert: DBIOAction[Keyword, NoStream, Effect.Write] =
+      (keywords returning keywords.map(_.id) into ((keyword, id) => keyword.copy(id = Some(id)))) += keyword
+
+    val filter = keywords filter { k =>
+      k.normalized.toLowerCase === norm.toLowerCase &&
+      k.category               === cat
+    }
+
+    val query = filter.result.headOption flatMap {
+      _.fold(insert)(DBIO.successful)
     }
 
     db.run(query.transactionally)

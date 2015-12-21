@@ -68,3 +68,25 @@
 .category-filter a:hover {
     cursor: pointer;
 }
+
+.adv-search {
+    width  : 95%;
+    margin : 10px 0;
+}
+
+.adv-search a,
+.adv-search a:active,
+.adv-search a:focus {
+    color: #ffb232;
+    text-decoration: none;
+}
+
+.adv-search a:hover {
+    color: #333;
+    text-decoration: none;
+}
+
+#adv-search-inputs {
+    width : 70%;
+    margin: -30px auto;
+}

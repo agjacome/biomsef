@@ -1,7 +1,2 @@
--Xms4096M
--Xmx4096M
--Xss6M
--XX:ReservedCodeCacheSize=256M
--XX:+UseConcMarkSweepGC
--XX:+CMSClassUnloadingEnabled
 -Dsbt.jse.engineType=Node
+

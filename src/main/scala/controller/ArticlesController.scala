@@ -20,6 +20,8 @@ object ArticlesController extends Controller with Authorization {
 
   lazy val articlesDAO    = new ArticlesDAO
   lazy val annotationsDAO = new AnnotationsDAO
+  lazy val authorsDAO     = new AuthorsDAO
+  lazy val authoringDAO   = new ArticleAuthorsDAO
 
   def list(page: Option[Int], count: Option[Int]): Action[AnyContent] =
     Action.async {
@@ -44,16 +46,27 @@ object ArticlesController extends Controller with Authorization {
       articlesDAO.delete(id).map(_ => NoContent)
     }
 
-  private def withAnnotatedArticle(id: Article.ID)(f: AnnotatedArticle => Result): Future[Result] =
-    annotationsDAO.getAnnotatedArticle(id) flatMap {
-      case a @ Some(_) => Future.successful(a)
-      case None        => articlesDAO.get(id) map { _.map(_.toAnnotatedArticle) }
-    } map {
-      _.map(f).getOrElse(NotFound(Json.obj("err" -> "Article not found")))
+  private def withAnnotatedArticle(id: Article.ID)(f: AnnotatedArticle => Result): Future[Result] = {
+    val aa = annotationsDAO.getAnnotatedArticle(id).flatMap(
+      aa => aa.fold(articlesDAO.get(id).flatMap(toAnnotatedArticle))(_ ⇒ Future.successful(aa))
+    )
+
+    aa.map(_.fold(NotFound(Json.obj("err" -> "Article not found")))(f))
+  }
+
+  // FIXME: ugly & unsafe gets
+  private def toAnnotatedArticle(a: Option[Article]): Future[Option[AnnotatedArticle]] = {
+    val article = a.get 
+
+    val authors: Future[Seq[Option[(Author, Int)]]] = authoringDAO.getByArticle(article.id.get) flatMap {
+      aas => Future.sequence(aas map {
+        case (_, id, pos) => authorsDAO.get(id).map(_.map((_, pos)))
+      })
     }
 
-  private implicit class ArticleOps(val a: Article) extends AnyVal {
-    def toAnnotatedArticle: AnnotatedArticle = AnnotatedArticle(a, Set.empty, Set.empty)
+    authors.map(_.filter(_.isDefined).map(_.get).toList.sortBy(_._2).map(_._1)) map {
+      as => a.map(art => AnnotatedArticle(art, as, Set.empty, Set.empty))
+    }
   }
 
 }

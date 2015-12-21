@@ -56,8 +56,8 @@ final class Annotator extends Actor {
 
   private def checkAndAnnotate(maybeArticle: Option[Article], id: Article.ID, senderName: String): Unit =
     maybeArticle.fold(Logger.error(s"[$senderName] Cannot find article $id")) {
-      case Article(_, _, _, _, true, _) => Logger.warn(s"[$senderName] Ignoring already annotated article $id")
-      case Article(_, _, _, _, _, true) => Logger.warn(s"[$senderName] Ignoring already processing article $id")
+      case Article(_, _, _, _, _, true, _) => Logger.warn(s"[$senderName] Ignoring already annotated article $id")
+      case Article(_, _, _, _, _, _, true) => Logger.warn(s"[$senderName] Ignoring already processing article $id")
       case article                      => annotateArticle(article, senderName)
     }
 
