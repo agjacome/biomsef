@@ -124,10 +124,10 @@ final class SearchTermsDAO extends SearchTermsComponent with ArticlesComponent w
   }
 
   def insert(term: SearchTerm): Future[SearchTerm] =
-    db.run((terms += term).transactionally).map(_ => term)
+    db.run((terms += term)).map(_ => term)
 
   def insert(terms: SearchTerm*): Future[Seq[SearchTerm]] =
-    db.run((this.terms ++= terms).transactionally).map(_ => terms)
+    db.run((this.terms ++= terms)).map(_ => terms)
 
   def clear(): Future[Unit] =
     db.run(terms.delete.transactionally).map(_ => ())

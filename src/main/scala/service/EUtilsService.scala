@@ -26,6 +26,9 @@ final class EUtilsService {
   def fetchPubMedArticles(pmids: Set[Article.PMID]): Future[Set[(Article, List[Author])]] =
     fetch("pubmed", pmids, "abstract").map(parseResultArticles).map(_.toSet)
 
+  def fetchTaxonomyScientificName(taxonomyId: Long): Future[Option[String]] =
+    summary("taxonomy", taxonomyId).map(parseScientificName)
+
   def serviceURL(service: String): String =
     s"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/$service.fcgi"
 
@@ -46,6 +49,11 @@ final class EUtilsService {
       "rettype" -> rettype
     )
 
+  def summary(db: String, id: Long): Future[XMLElement] =
+    simpleHttpRequest(serviceURL("esummary"))(
+      "db" -> db, "id" -> id.toString
+    )
+
   private def simpleHttpRequest[A](address: String)(params: (String, String)*)(implicit asA: Res => A): Future[A] =
     Http(dispatch.url(address).setBodyEncoding("UTF-8") <<? params > asA)
 
@@ -63,8 +71,8 @@ final class EUtilsService {
       pmid  <- (article \\ "PMID").headOption.map(_.text.toLong)
       title <- (article \\ "ArticleTitle").headOption.map(_.text.dropRight(1))
       abstr <- (article \\ "AbstractText").headOption.map(_.text)
-      year  <- (article \\ "PubDate" \\ "Year").headOption.map(_.text.toLong)
-      auths <- Option(parseAuthors(article))
+      year  <- (article \\ "PubDate" \\ "Year").headOption.map(_.text.toLong).orElse(Option(1900L))
+      auths <- Option(parseAuthors(article)).orElse(Option(List.empty))
     } yield (Article(Some(pmid), title, title + "." + System.lineSeparator + abstr, year), auths)
 
   private def parseAuthors(article: XMLNode): List[Author] =

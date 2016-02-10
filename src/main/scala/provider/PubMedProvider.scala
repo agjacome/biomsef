@@ -43,20 +43,36 @@ final class PubMedProvider {
     })
 
   private def insertOrRetrieveAuthors(as: List[Author]): Future[List[Author]] =
-    Future.sequence(as map { a =>
-      authorsDAO.getByName(a.lastName, a.firstName, a.initials) flatMap {
-        _.fold(authorsDAO.insert(a))(Future.successful)
-      }
-    })
+    Future.successful { as.map(insertOrRetrieveAuthor) }
+
+  private def insertOrRetrieveAuthor(a: Author): Author = {
+    import scala.concurrent.Await
+    import scala.concurrent.duration.Duration
+
+    try {
+      Await.result(authorsDAO.getByNameOrInsert(a), Duration.Inf)
+    } catch {
+      case e: java.sql.SQLIntegrityConstraintViolationException =>
+        play.api.Logger.error(s"Error inserting $a, will retry. Cause: ${e.getMessage}")
+        Thread.sleep(300L)
+        insertOrRetrieveAuthor(a)
+    }
+  }
 
   private def associateArticleAuthors(art: Article, auts: List[Author]): Future[Unit] = {
+    import scala.concurrent.Await
+    import scala.concurrent.duration.Duration
     import authoringDAO.ArticleAuthor
 
+    // FIXME: unsafe .get
     val aas: List[ArticleAuthor] = auts.zipWithIndex map {
-      case (aut, idx) => (art.id.get, aut.id.get, idx + 1) // FIXME: unsafe .get
+      case (a, idx) => (art.id.get, a.id.get, idx + 1)
     }
 
-    authoringDAO.insert(aas: _*)
+    // FIXME: this Await stuff is ugly, just fix it already
+    Future.successful(aas map {
+      a => Await.result(authoringDAO.insert(a), Duration.Inf)
+    }).map(_ => ())
   }
 
 }

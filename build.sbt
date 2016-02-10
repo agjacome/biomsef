@@ -1,6 +1,6 @@
 name         := "biomsef"
 organization := "es.uvigo.ei.sing"
-version      := "1.1.0"
+version      := "1.1.1"
 
 scalaVersion := "2.11.7"
 
@@ -48,7 +48,13 @@ libraryDependencies ++= Seq(
   "org.webjars" % "requirejs"            % "2.1.20" ,
   "org.webjars" % "angular-ui-bootstrap" % "0.13.4" ,
   "org.webjars" % "font-awesome"         % "4.4.0"  ,
-  "org.webjars" % "ng-tags-input"        % "2.3.0"
+  "org.webjars" % "ng-tags-input"        % "2.3.0"  ,
+
+  // testing
+  "org.scalatest"     %% "scalatest"    % "2.2.5"   % "test" ,
+  "org.scalacheck"    %% "scalacheck"   % "1.12.3"  % "test" ,
+  "com.typesafe.akka" %% "akka-testkit" % "2.3.14"  % "test" ,
+  "org.mockito"       %  "mockito-core" % "1.10.19" % "test"
 )
 
 import PlayKeys.playPackageAssets

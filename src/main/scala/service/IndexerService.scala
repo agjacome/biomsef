@@ -1,11 +1,13 @@
 package es.uvigo.ei.sing.biomsef
 package service
 
-import scala.concurrent.Future
+import java.util.concurrent.Executors
+
+import scala.collection.parallel._
+import scala.concurrent._
 import scala.util.{ Try, Success, Failure }
 
 import play.api.{ Logger, Play }
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 import akka.actor._
 
@@ -18,6 +20,8 @@ case object PopulateIndex extends IndexerMessage
 case object UpdateIndex   extends IndexerMessage
 
 final class IndexerService extends Actor {
+
+  import ExecutionContext.Implicits._
 
   lazy val indexDAO       = new SearchTermsDAO
   lazy val articlesDAO    = new ArticlesDAO
@@ -61,31 +65,41 @@ final class IndexerService extends Actor {
   }
 
   private def insertSearchTerms(): Future[Seq[SearchTerm]] =
-    searchTerms flatMap {
-      terms => indexDAO.insert(terms: _*)
-    }
+    searchTerms.flatMap(terms => indexDAO.insert(terms: _*))
 
   private def searchTerms: Future[Seq[SearchTerm]] =
-    frequencies flatMap {
-      f => Future.sequence(f.toSeq map {
-        case ((aid, kid), (tf, idf, tfidf)) =>
-          // FIXME: unsafe get
-          val term = keywordsDAO.get(kid).map(_.get.normalized)
-          term.map(t => SearchTerm(t, tf, idf, tfidf, aid, kid))
-      })
-    }
+    frequencies.flatMap(freqs => Future.sequence(freqs map {
+      case (aid, kid, tf, idf, tfidf) =>
+        keywordsDAO.get(kid).map(_.get.normalized).map(term =>
+            SearchTerm(term, tf, idf, tfidf, aid, kid)
+        )
+    }))
 
-  private def frequencies: Future[Map[(Article.ID, Keyword.ID), (Double, Double, Double)]] =
+  private def frequencies: Future[Seq[(Article.ID, Keyword.ID, Double, Double, Double)]] =
     for {
       n   <- articlesDAO.count
+      cts <- annotationsDAO.countByKeyword
       tfs <- annotationsDAO.countByArticleAndKeyword
-    } yield computeTFIDF(n, tfs)
+    } yield computeTFIDF(n, cts, tfs)
 
-  private def computeTFIDF(count: Int, freqs: Map[(Article.ID, Keyword.ID), Int]): Map[(Article.ID, Keyword.ID), (Double, Double, Double)] =
-    freqs.toSeq map { case ((aid, kid), tf) =>
-      val idf   = Math.log(freqs.count(kv => kv._1._2 == kid).toDouble)
+  private def computeTFIDF(
+    count:  Int,
+    counts: Map[Keyword.ID, Int],
+    freqs:  Map[(Article.ID, Keyword.ID), Int]
+  ): Seq[(Article.ID, Keyword.ID, Double, Double, Double)] = {
+    var fs = freqs.par
+    fs.tasksupport = new ExecutionContextTaskSupport(
+      ExecutionContext.fromExecutorService(
+        Executors.newFixedThreadPool(5000)
+      )
+    )
+
+    fs.map({ case ((aid, kid), tf) =>
+      Logger.info(s"Computing TF-IDF for article $aid and keyword $kid")
+      val idf   = Math.log(counts(kid).toDouble)
       val tfidf = tf * idf
-      ((aid, kid), (tf.toDouble, idf, tfidf))
-    } toMap
+      (aid, kid, tf.toDouble, idf, tfidf)
+    }).seq.toSeq
+  }
 
 }

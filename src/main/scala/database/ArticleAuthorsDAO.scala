@@ -56,8 +56,20 @@ final class ArticleAuthorsDAO extends AuthorsComponent with ArticlesComponent wi
   def getByAuthor(authorId: Author.ID): Future[Seq[ArticleAuthor]] =
     db.run(articleAuthors.filter(_.authorId === authorId).result)
 
-  def insert(articleAuthor: ArticleAuthor): Future[Unit] =
-    db.run(articleAuthors += articleAuthor).map(_ => ())
+  def insert(articleAuthor: ArticleAuthor): Future[Unit] = {
+    def insert = (articleAuthors += articleAuthor).map(_ => ())
+
+    def filter = articleAuthors.filter { aa =>
+      (aa.articleId === articleAuthor._1) &&
+      (aa.authorId  === articleAuthor._2)
+    }
+
+    def query = filter.result.headOption flatMap {
+      _.fold(insert)(_ => DBIO.successful(()))
+    }
+
+    db.run(query)
+  }
 
   def insert(articleAuthors: ArticleAuthor*): Future[Unit] =
     db.run(this.articleAuthors ++= articleAuthors).map(_ => ())
